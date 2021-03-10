@@ -70,11 +70,15 @@ describe MoviesController do
 	describe '#create' do
 
 		before (:each) do
-			@movie4=FactoryBot.create(:movie, :title=>"fourth",:director=>'do not care',:rating=>'PG', :description=>'no description yet')
+			@movie4=FactoryBot.build(:movie, :title=>"fourth",:director=>'do not care',:rating=>'PG', :description=>'no description yet')
 		end
 		it 'should create the movie, return correct flash message, and redirect to homepage' do
 			@movie_param={title: @movie4.title, director: @movie4.director,rating: @movie4.rating, description: @movie4.description, release_date: @movie4.release_date}
-			post :create, {id:@movie4.id,movie:@movie_param}
+			post :create, {movie:@movie_param}
+			#@movie4 should have everything eq to assign[:movie] except id
+			#since with factorybot.build, movie4 should not have an id
+			@movie4.id=assigns[:movie].id
+			expect(assigns[:movie]).to eq(@movie4)
 			expect(flash[:notice]).to eq("#{@movie4.title} was successfully created.")
 			expect(response).to redirect_to(movies_path)
 		end
@@ -86,7 +90,14 @@ describe MoviesController do
 		end
 		it "should update the movie, return correct flash message, and redirect to selected movie's page" do
 			@movie_param={title: @movie5.title, director: @movie5.director,rating: @movie5.rating, description: "new description", release_date: @movie5.release_date}
+			
+			expected_update_movie=FactoryBot.build(:movie,title: @movie5.title, director: @movie5.director,rating: @movie5.rating, description: "new description", release_date: @movie5.release_date)
+			
 			post :update, {id:@movie5.id,movie:@movie_param}
+			
+			expected_update_movie.id=assigns[:movie].id
+			expect(expected_update_movie).to eq(assigns[:movie])
+			
 			expect(flash[:notice]).to eq("#{@movie5.title} was successfully updated.")
 			expect(response).to redirect_to(movie_path(@movie5))
 		end
