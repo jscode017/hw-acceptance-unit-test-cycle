@@ -4,5 +4,6 @@ FactoryBot .define do
 		title {'do not care'}
 		rating {'PG'}
 		director {nil}
+		release_date {10.years.ago}
 	end
 end	
