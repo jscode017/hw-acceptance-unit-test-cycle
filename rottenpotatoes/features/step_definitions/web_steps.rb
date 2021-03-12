@@ -105,13 +105,19 @@ Then /^the director of "(.*)" should be "(.*)"$/ do |title,director|
   expect(Movie.find_by(title:title).director).to eq director
 end
 Then /^(?:|I )should see "([^"]*)"$/ do |text|
-  if page.respond_to? :should
+  #add this ugly code to detect has no director info
+  if text.include? "has no director info"
+    index=text.index(" has no director info")
+    movie_name=text[1,index-2]
+    movie_class='.'+movie_name
+    text = page.find(movie_class, visible: true).text
+    expect(text).to eq ""
+  elsif page.respond_to? :should
     page.should have_content(text)
   else
     assert page.has_content?(text)
   end
 end
-
 Then /^(?:|I )should see \/([^\/]*)\/$/ do |regexp|
   regexp = Regexp.new(regexp)
 

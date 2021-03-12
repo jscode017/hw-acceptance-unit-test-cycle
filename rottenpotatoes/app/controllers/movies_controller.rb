@@ -8,6 +8,45 @@ class MoviesController < ApplicationController
 
   def index
     @movies = Movie.all
+    @all_ratings=Movie.all_ratings
+    if !params.include?(:notFirst)
+      session.clear
+    end
+    if !params.include?(:ratings) && !session.include?(:ratings)
+      @movies=Movie.all
+      @ratings_to_show=[]
+      session[:ratings]=Hash.new
+    elsif params.include?(:ratings)
+      @ratings_to_show=params[:ratings].keys
+      if @ratings_to_show.length==0
+        @rating_to_show=[]
+      end
+      @movies=Movie.with_ratings(@ratings_to_show)
+      session[:ratings]=params[:ratings]
+    elsif params.include?(:commit)
+      @movies=Movie.all
+      @ratings_to_show=[]
+      session[:ratings]=Hash.new
+    elsif 
+      @ratings_to_show=session[:ratings].keys
+      if @ratings_to_show.length==0
+        @rating_to_show=[]
+      end
+      @movies=Movie.with_ratings(@ratings_to_show)
+    end
+    @sort_by=''
+    if params.include?(:sort_by)
+      @sort_by=params[:sort_by]
+      session[:sort_by]=params[:sort_by]
+    elsif session.include?(:sort_by)
+      @sort_by=session[:sort_by]
+    end
+    
+    if @sort_by=='title'
+      @movies=@movies.order('title')
+    elsif @sort_by=='release_date'
+      @movies=@movies.order('release_date')
+    end   
   end
 
   def new
