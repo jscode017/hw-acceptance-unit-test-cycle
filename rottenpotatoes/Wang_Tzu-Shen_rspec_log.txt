@@ -1,6 +1,34 @@
-.............
 
-Finished in 0.0913 seconds (files took 1.82 seconds to load)
+MoviesController
+  #with_same_director
+    return movies when calling with_same_director if director!=null
+    redirect to homepage movies when calling with_same_director if director==null
+  #index
+    should return all movies
+  #find
+    should return movie with correct id
+  #new
+    should render new
+  #create
+    should create the movie, return correct flash message, and redirect to homepage
+  #update
+    should update the movie, return correct flash message, and redirect to selected movie's page
+  #edit
+    should find and go to edit page of selected movie
+  #destroy
+    should destroy the movie, and return correct flash message, and redirect to homepage
+
+MoviesHelper
+  #oddness
+    should return odd if the number is odd
+    should return even if the number is even
+
+Movie
+  movies_with_same_director
+    return movies when calling with_same_director if director!=null
+    not movies when calling with_same_director if director==null
+
+Finished in 0.12014 seconds (files took 4.33 seconds to load)
 13 examples, 0 failures
 
-Coverage report generated for Cucumber Features, RSpec to /Users/jasonwang/hw4606/hw-acceptance-unit-test-cycle/rottenpotatoes/coverage. 77 / 83 LOC (92.77%) covered.
+Coverage report generated for RSpec to /Users/jasonwang/hw4606/hw-acceptance-unit-test-cycle/rottenpotatoes/coverage. 60 / 83 LOC (72.29%) covered.
